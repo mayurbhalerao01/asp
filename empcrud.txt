@@ -1,0 +1,363 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs" Inherits="Employee_Crud_ASP.WebForm1" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            Eid
+            <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
+            <br />
+            <br />
+            Ename
+            <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox>
+            <br />
+            Designation
+            <asp:TextBox ID="TextBox3" runat="server"></asp:TextBox>
+            <br />
+            <br />
+            Profile Pic
+            <asp:FileUpload ID="FileUpload1" runat="server" />
+            <br />
+            <br />
+            Salary
+            <asp:TextBox ID="TextBox4" runat="server"></asp:TextBox>
+            <br />
+            <br />
+            Email
+            <asp:TextBox ID="TextBox5" runat="server"></asp:TextBox>
+            <br />
+            Mobile no
+            <asp:TextBox ID="TextBox6" runat="server"></asp:TextBox>
+            <br />
+            Department
+            <asp:TextBox ID="TextBox7" runat="server"></asp:TextBox>
+            <br />
+            Post
+            <asp:TextBox ID="TextBox8" runat="server"></asp:TextBox>
+            <br />
+            Empno
+            <asp:TextBox ID="TextBox9" runat="server"></asp:TextBox>
+            <br />
+            <br />
+            <asp:Button ID="BtnSubmit" runat="server" Text="Submit" OnClick="BtnSubmit_Click" />
+            &nbsp;
+            <asp:Button ID="BtnUpdate" runat="server" Text="Update" OnClick="BtnUpdate_Click"/>
+            &nbsp;&nbsp;
+            <asp:Button ID="BtnReset" runat="server" Text="Reset" OnClick="BtnReset_Click" />
+            <br />
+            <br />
+            <br />
+            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="false" DataKeyNames="Eid" OnRowEditing="GridView1_RowEditing" OnRowCancelingEdit="GridView1_RowCancelingEdit" OnRowUpdating="GridView1_RowUpdating" OnRowDeleting="GridView1_RowDeleting">
+                <Columns>
+                    <asp:BoundField DataField="Eid" HeaderText="Eid" ReadOnly="true" />
+                    <asp:TemplateField HeaderText="Ename">
+                        <ItemTemplate>
+                            <%# Eval("Ename") %>
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <asp:TextBox ID="TextBoxEname" runat="server" Text='<%# Bind("Ename") %>'></asp:TextBox>
+                        </EditItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Designation">
+                        <ItemTemplate>
+                            <%# Eval("Designation") %>
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <asp:TextBox ID="TextBoxDesignation" runat="server" Text='<%# Bind("Designation") %>'></asp:TextBox>
+                        </EditItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="ProfilePic">
+                        <ItemTemplate>
+                            <img src='<%# GetImageUrl(Eval("ProfilePic")) %>' alt="Profile Pic" style="width:50px;height:50px;" />
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <asp:FileUpload ID="FileUploadEdit" runat="server" />
+                        </EditItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Salary">
+                        <ItemTemplate>
+                            <%# Eval("Salary") %>
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <asp:TextBox ID="TextBoxSalary" runat="server" Text='<%# Bind("Salary") %>'></asp:TextBox>
+                        </EditItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Email">
+                        <ItemTemplate>
+                            <%# Eval("Email") %>
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <asp:TextBox ID="TextBoxEmail" runat="server" Text='<%# Bind("Email") %>'></asp:TextBox>
+                        </EditItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="MobileNo">
+                        <ItemTemplate>
+                            <%# Eval("MobileNo") %>
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <asp:TextBox ID="TextBoxMobileNo" runat="server" Text='<%# Bind("MobileNo") %>'></asp:TextBox>
+                        </EditItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Department">
+                        <ItemTemplate>
+                            <%# Eval("Department") %>
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <asp:TextBox ID="TextBoxDepartment" runat="server" Text='<%# Bind("Department") %>'></asp:TextBox>
+                        </EditItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Post">
+                        <ItemTemplate>
+                            <%# Eval("Post") %>
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <asp:TextBox ID="TextBoxPost" runat="server" Text='<%# Bind("Post") %>'></asp:TextBox>
+                        </EditItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Empno">
+                        <ItemTemplate>
+                            <%# Eval("Empno") %>
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <asp:TextBox ID="TextBoxEmpno" runat="server" Text='<%# Bind("Empno") %>'></asp:TextBox>
+                        </EditItemTemplate>
+                    </asp:TemplateField>
+                    <asp:CommandField ShowEditButton="true" ShowDeleteButton="true" />
+                </Columns>
+            </asp:GridView>
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cs file
+
+
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Employee_Crud_ASP
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        SqlConnection con = new SqlConnection("Data Source=DESKTOP-Q709DQH\\SQLEXPRESS;Initial Catalog=Logic;Integrated Security=True");
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                LoadRecord();
+            }
+        }
+
+        void LoadRecord()
+        {
+            SqlCommand cmd = new SqlCommand("select *from Employee3", con);
+            SqlDataAdapter sda = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            sda.Fill(dt);
+            if (dt.Rows.Count > 0)
+            {
+                GridView1.DataSource = dt;
+                GridView1.DataBind();
+            }
+            else
+            {
+                dt.Rows.Add(dt.NewRow());
+                GridView1.DataSource = dt;
+                GridView1.DataBind();
+                GridView1.Rows[0].Cells.Clear();
+                GridView1.Rows[0].Cells.Add(new TableCell());
+                GridView1.Rows[0].Cells[0].ColumnSpan = dt.Columns.Count;
+                GridView1.Rows[0].Cells[0].Text = "No Data Found";
+                GridView1.Rows[0].Cells[0].HorizontalAlign = HorizontalAlign.Center;
+
+            }
+
+        }
+
+        protected void BtnSubmit_Click(object sender, EventArgs e)
+        {
+            byte[] imageBytes = null;
+            if (FileUpload1.HasFile)
+            {
+                using (BinaryReader br = new BinaryReader(FileUpload1.PostedFile.InputStream))
+                {
+                    imageBytes = br.ReadBytes(FileUpload1.PostedFile.ContentLength);
+                }
+            }
+
+            SqlCommand cmd = new SqlCommand("insert into Employee3 (Ename, Designation, ProfilePic, Salary, Email, MobileNo, Department, Post, Empno) values (@Ename, @Designation, @ProfilePic, @Salary, @Email, @MobileNo, @Department, @Post, @Empno)", con);
+            cmd.Parameters.AddWithValue("@Ename", TextBox2.Text);
+            cmd.Parameters.AddWithValue("@Designation", TextBox3.Text);
+            cmd.Parameters.AddWithValue("@ProfilePic", (object)imageBytes ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@Salary", TextBox4.Text);
+            cmd.Parameters.AddWithValue("@Email", TextBox5.Text);
+            cmd.Parameters.AddWithValue("@MobileNo", TextBox6.Text);
+            cmd.Parameters.AddWithValue("@Department", TextBox7.Text);
+            cmd.Parameters.AddWithValue("@Post", TextBox8.Text);
+            cmd.Parameters.AddWithValue("@Empno", TextBox9.Text);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+            LoadRecord();
+        }
+        protected void BtnUpdate_Click(object sender, EventArgs e)
+        {
+            int id = Convert.ToInt32(TextBox1.Text);
+            byte[] imageBytes = null;
+            if (FileUpload1.HasFile)
+            {
+                using (BinaryReader br = new BinaryReader(FileUpload1.PostedFile.InputStream))
+                {
+                    imageBytes = br.ReadBytes(FileUpload1.PostedFile.ContentLength);
+                }
+            }
+
+            SqlCommand cmd = new SqlCommand("update Employee3 set Ename=@Ename, Designation=@Designation, ProfilePic=@ProfilePic, Salary=@Salary, Email=@Email, MobileNo=@MobileNo, Department=@Department, Post=@Post, Empno=@Empno where Eid=@Eid", con);
+            cmd.Parameters.AddWithValue("@Eid", id);
+            cmd.Parameters.AddWithValue("@Ename", TextBox2.Text);
+            cmd.Parameters.AddWithValue("@Designation", TextBox3.Text);
+            cmd.Parameters.AddWithValue("@ProfilePic", (object)imageBytes ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@Salary", TextBox4.Text);
+            cmd.Parameters.AddWithValue("@Email", TextBox5.Text);
+            cmd.Parameters.AddWithValue("@MobileNo", TextBox6.Text);
+            cmd.Parameters.AddWithValue("@Department", TextBox7.Text);
+            cmd.Parameters.AddWithValue("@Post", TextBox8.Text);
+            cmd.Parameters.AddWithValue("@Empno", TextBox9.Text);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+            LoadRecord();
+        }
+
+        protected void GridView1_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            GridView1.EditIndex = e.NewEditIndex;
+            LoadRecord();
+        }
+
+        protected void GridView1_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            GridView1.EditIndex = -1;
+            LoadRecord();
+        }
+
+        protected void GridView1_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            int id = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Value.ToString());
+            GridViewRow row = (GridViewRow)GridView1.Rows[e.RowIndex];
+
+            TextBox ename = (TextBox)row.Cells[1].Controls[0];
+            TextBox designation = (TextBox)row.Cells[2].Controls[0];
+            FileUpload profilePic = (FileUpload)row.FindControl("FileUploadEdit");
+            TextBox salary = (TextBox)row.Cells[4].Controls[0];
+            TextBox email = (TextBox)row.Cells[5].Controls[0];
+            TextBox mobileNo = (TextBox)row.Cells[6].Controls[0];
+            TextBox department = (TextBox)row.Cells[7].Controls[0];
+            TextBox post = (TextBox)row.Cells[8].Controls[0];
+            TextBox empno = (TextBox)row.Cells[9].Controls[0];
+
+            byte[] imageBytes = null;
+            if (profilePic.HasFile)
+            {
+                using (BinaryReader br = new BinaryReader(profilePic.PostedFile.InputStream))
+                {
+                    imageBytes = br.ReadBytes(profilePic.PostedFile.ContentLength);
+                }
+            }
+
+            SqlCommand cmd = new SqlCommand("update Employee3 set Ename=@Ename, Designation=@Designation, ProfilePic=@ProfilePic, Salary=@Salary, Email=@Email, MobileNo=@MobileNo, Department=@Department, Post=@Post, Empno=@Empno where Eid=@Eid", con);
+            cmd.Parameters.AddWithValue("@Eid", id);
+            cmd.Parameters.AddWithValue("@Ename", ename.Text);
+            cmd.Parameters.AddWithValue("@Designation", designation.Text);
+            if (imageBytes != null)
+            {
+                cmd.Parameters.AddWithValue("@ProfilePic", imageBytes);
+            }
+            else
+            {
+                cmd.Parameters.AddWithValue("@ProfilePic", DBNull.Value);
+            }
+            cmd.Parameters.AddWithValue("@Salary", salary.Text);
+            cmd.Parameters.AddWithValue("@Email", email.Text);
+            cmd.Parameters.AddWithValue("@MobileNo", mobileNo.Text);
+            cmd.Parameters.AddWithValue("@Department", department.Text);
+            cmd.Parameters.AddWithValue("@Post", post.Text);
+            cmd.Parameters.AddWithValue("@Empno", empno.Text);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+            GridView1.EditIndex = -1;
+            LoadRecord();
+        }
+
+        protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            int id = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Value.ToString());
+            SqlCommand cmd = new SqlCommand("delete from Employee3 where Eid=@Eid", con);
+            cmd.Parameters.AddWithValue("@Eid", id);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+            LoadRecord();
+        }
+
+        protected void BtnReset_Click(object sender, EventArgs e)
+        {
+            TextBox1.Text = "";
+            TextBox2.Text = "";
+            TextBox3.Text = "";
+            TextBox4.Text = "";
+            TextBox5.Text = "";
+            TextBox6.Text = "";
+            TextBox7.Text = "";
+            TextBox8.Text = "";
+            TextBox9.Text = "";
+        }
+
+        protected string GetImageUrl(object image)
+        {
+            if (image != DBNull.Value)
+            {
+                byte[] imageBytes = (byte[])image;
+                string base64String = Convert.ToBase64String(imageBytes);
+                return "data:image/png;base64," + base64String;
+            }
+            return "~/Images/no-image.png"; // Default image if no profile picture is available
+        }
+    }
+}
